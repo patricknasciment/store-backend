@@ -1,7 +1,5 @@
 package com.patrick.store.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
@@ -9,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_category")
-public class Category implements Serializable {
+@Table(name = "tb_product")
+public class Product implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -19,16 +17,21 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    private Double price;
 
-    @ManyToMany(mappedBy = "categories")
-    private List<Product> products = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "tb_product_category",
+    joinColumns = @JoinColumn(name = "product_id"),
+    inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<Category> categories = new ArrayList<>();
 
-    public Category() {
+    public Product() {
     }
 
-    public Category(Integer id, String name) {
+    public Product(Integer id, String name, Double price) {
         this.id = id;
         this.name = name;
+        this.price = price;
     }
 
     public Integer getId() {
@@ -47,12 +50,20 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     @Override
@@ -60,14 +71,13 @@ public class Category implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Category category = (Category) o;
+        Product product = (Product) o;
 
-        return id != null ? id.equals(category.id) : category.id == null;
+        return id != null ? id.equals(product.id) : product.id == null;
     }
 
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
-
 }
