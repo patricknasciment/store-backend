@@ -1,9 +1,13 @@
 package com.patrick.store.config;
 
 import com.patrick.store.domain.Category;
+import com.patrick.store.domain.City;
 import com.patrick.store.domain.Product;
+import com.patrick.store.domain.State;
 import com.patrick.store.repositories.CategoryRepository;
+import com.patrick.store.repositories.CityRepository;
 import com.patrick.store.repositories.ProductRepository;
+import com.patrick.store.repositories.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +23,12 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private StateRepository stateRepository;
+
+    @Autowired
+    private CityRepository cityRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -39,5 +49,20 @@ public class TestConfig implements CommandLineRunner {
 
         productRepository.saveAll(List.of(p1, p2, p3));
         categoryRepository.saveAll(List.of(cat1, cat2));
+
+        State state1 = new State(null, "Minas Gerais");
+        State state2 = new State(null, "São Paulo");
+
+        City city1 = new City(null, "Uberlândia", state1);
+        City city2 = new City(null, "Campinas", state2);
+        City city3 = new City(null, "Mogi Mirim", state2);
+
+        state1.getCities().add(city1);
+        state2.getCities().addAll(List.of(city2, city3));
+
+        stateRepository.saveAll(List.of(state1, state2));
+        cityRepository.saveAll(List.of(city1, city2, city3));
+
+
     }
 }

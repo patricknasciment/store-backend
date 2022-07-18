@@ -1,16 +1,12 @@
 package com.patrick.store.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "tb_category")
-public class Category implements Serializable {
+@Table(name = "tb_city")
+public class City implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -20,16 +16,16 @@ public class Category implements Serializable {
     private Integer id;
     private String name;
 
-    @JsonManagedReference
-    @ManyToMany(mappedBy = "categories")
-    private List<Product> products = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "state_id")
+    private State state;
 
-    public Category() {
-    }
+    public City(){}
 
-    public Category(Integer id, String name) {
+    public City(Integer id, String name, State state) {
         this.id = id;
         this.name = name;
+        this.state = state;
     }
 
     public Integer getId() {
@@ -48,12 +44,12 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public State getState() {
+        return state;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setState(State state) {
+        this.state = state;
     }
 
     @Override
@@ -61,14 +57,13 @@ public class Category implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Category category = (Category) o;
+        City city = (City) o;
 
-        return id != null ? id.equals(category.id) : category.id == null;
+        return id != null ? id.equals(city.id) : city.id == null;
     }
 
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
-
 }

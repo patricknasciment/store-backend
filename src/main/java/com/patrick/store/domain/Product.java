@@ -1,5 +1,7 @@
 package com.patrick.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,6 +25,8 @@ public class Product implements Serializable {
     @JoinTable(name = "tb_product_category",
     joinColumns = @JoinColumn(name = "product_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id"))
+
+    @JsonBackReference
     private List<Category> categories = new ArrayList<>();
 
     public Product() {
