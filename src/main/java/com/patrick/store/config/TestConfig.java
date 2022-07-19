@@ -1,18 +1,14 @@
 package com.patrick.store.config;
 
-import com.patrick.store.domain.Category;
-import com.patrick.store.domain.City;
-import com.patrick.store.domain.Product;
-import com.patrick.store.domain.State;
-import com.patrick.store.repositories.CategoryRepository;
-import com.patrick.store.repositories.CityRepository;
-import com.patrick.store.repositories.ProductRepository;
-import com.patrick.store.repositories.StateRepository;
+import com.patrick.store.domain.*;
+import com.patrick.store.domain.enums.ClientType;
+import com.patrick.store.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -29,6 +25,12 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private CityRepository cityRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -63,6 +65,15 @@ public class TestConfig implements CommandLineRunner {
         stateRepository.saveAll(List.of(state1, state2));
         cityRepository.saveAll(List.of(city1, city2, city3));
 
+        Client cli1 = new Client(null, "Maria Silva", "maria@gmail.com", "11111111111", ClientType.PESSOAFISICA);
+        cli1.getPhones().addAll(List.of("999999999", "888888888"));
 
+        Address ad1 = new Address(null, "Rua Pescador", "99", "Macacos", "99999999", "casa", cli1,city1);
+        Address ad2 = new Address(null, "Rua Jovial", "33", "Lambaris", "29299299", "ap", cli1,city2);
+
+        cli1.getAddresses().addAll(List.of(ad1, ad2));
+
+        clientRepository.save(cli1);
+        addressRepository.saveAll(List.of(ad1,ad2));
     }
 }
