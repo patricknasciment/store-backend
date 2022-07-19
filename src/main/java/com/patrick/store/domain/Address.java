@@ -1,5 +1,7 @@
 package com.patrick.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,6 +23,7 @@ public class Address implements Serializable {
     private String zipcode;
     private String more;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
