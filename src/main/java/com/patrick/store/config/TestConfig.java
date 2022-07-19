@@ -2,12 +2,14 @@ package com.patrick.store.config;
 
 import com.patrick.store.domain.*;
 import com.patrick.store.domain.enums.ClientType;
+import com.patrick.store.domain.enums.PaymentState;
 import com.patrick.store.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,8 +34,16 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Override
     public void run(String... args) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
         Category cat1 = new Category(null, "informática");
         Category cat2 = new Category(null, "eletronicos");
         categoryRepository.saveAll(List.of(cat1, cat2));
@@ -75,5 +85,20 @@ public class TestConfig implements CommandLineRunner {
 
         clientRepository.save(cli1);
         addressRepository.saveAll(List.of(ad1,ad2));
+
+        Order order1 = new Order(null, sdf.parse("19/07/2022 20:09"), cli1, ad1);
+        Order order2 = new Order(null, sdf.parse("20/07/2022 16:22"), cli1, ad2);
+
+        Payment payment1 = new CreditCardPayment(null, PaymentState.PAID, order1, 10);
+        order1.setPayment(payment1);
+
+        Payment payment2 = new BilletPayment(null, PaymentState.PENDING, order2, sdf.parse("20/10/2022 00:00"), null);
+        order2.setPayment(payment2);
+
+        cli1.getOrders().addAll(List.of(order1, order2));
+
+        orderRepository.saveAll(List.of(order1, order2));
+        paymentRepository.saveAll(List.of(payment1, payment2));
+        clientRepository.save(cli1);
     }
 }
