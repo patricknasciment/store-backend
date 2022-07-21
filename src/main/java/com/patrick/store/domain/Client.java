@@ -29,7 +29,6 @@ public class Client implements Serializable {
     private String cpfOrCnpj;
     private Integer type;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "client")
     private List<Address> addresses = new ArrayList<>();
 
@@ -37,7 +36,7 @@ public class Client implements Serializable {
     @CollectionTable(name = "tb_phones")
     private Set<String> phones = new HashSet<>();
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 

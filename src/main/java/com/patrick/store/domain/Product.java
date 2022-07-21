@@ -29,7 +29,7 @@ public class Product implements Serializable {
     joinColumns = @JoinColumn(name = "product_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id"))
 
-    @JsonBackReference
+    @JsonIgnore
     private List<Category> categories = new ArrayList<>();
 
     @JsonIgnore
