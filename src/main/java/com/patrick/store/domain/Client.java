@@ -1,5 +1,7 @@
 package com.patrick.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.patrick.store.domain.enums.ClientType;
 
@@ -29,12 +31,13 @@ public class Client implements Serializable {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "client")
-    private List<Address> Addresses = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "tb_phones")
     private Set<String> phones = new HashSet<>();
 
+    @JsonBackReference
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 
@@ -90,11 +93,11 @@ public class Client implements Serializable {
     }
 
     public List<Address> getAddresses() {
-        return Addresses;
+        return addresses;
     }
 
     public void setAddresses(List<Address> addresses) {
-        Addresses = addresses;
+        addresses = addresses;
     }
 
     public Set<String> getPhones() {

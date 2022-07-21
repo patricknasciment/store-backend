@@ -1,5 +1,7 @@
 package com.patrick.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -13,6 +15,7 @@ public class OrderItem implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @JsonIgnore
     @EmbeddedId
     private OrderItemPK id = new OrderItemPK();
 
@@ -31,10 +34,12 @@ public class OrderItem implements Serializable {
         id.setProduct(product);
     }
 
+    @JsonIgnore
     public Order getOrder(){
         return id.getOrder();
     }
 
+    @JsonIgnore
     public Product getProduct(){
         return id.getProduct();
     }

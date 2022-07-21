@@ -1,5 +1,6 @@
 package com.patrick.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.patrick.store.domain.enums.PaymentState;
 
 import javax.persistence.Entity;
@@ -12,7 +13,10 @@ public class BilletPayment extends Payment{
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private Date dueDate;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private Date payDay;
 
     public BilletPayment() {
