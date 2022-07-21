@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_product")
@@ -29,6 +31,10 @@ public class Product implements Serializable {
     @JsonBackReference
     private List<Category> categories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> orderItemSet = new HashSet<>();
+
+
     public Product() {
     }
 
@@ -36,6 +42,14 @@ public class Product implements Serializable {
         this.id = id;
         this.name = name;
         this.price = price;
+    }
+
+    public List<Order> getOrders(){
+        List<Order> list = new ArrayList<>();
+        for (OrderItem x : orderItemSet){
+            list.add(x.getOrder());
+        }
+        return list;
     }
 
     public Integer getId() {
@@ -70,6 +84,14 @@ public class Product implements Serializable {
         this.categories = categories;
     }
 
+    public Set<OrderItem> getOrderItemSet() {
+        return orderItemSet;
+    }
+
+    public void setOrderItemSet(Set<OrderItem> orderItemSet) {
+        this.orderItemSet = orderItemSet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,4 +106,5 @@ public class Product implements Serializable {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
 }

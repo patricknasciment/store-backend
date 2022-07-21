@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order")
@@ -27,6 +29,9 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "address_shipping_id")
     private Address addressShipping;
+
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> orderItemSet = new HashSet<>();
 
     public Order() {
     }
@@ -78,6 +83,14 @@ public class Order implements Serializable {
         this.addressShipping = addressShipping;
     }
 
+    public Set<OrderItem> getOrderItemSet() {
+        return orderItemSet;
+    }
+
+    public void setOrderItemSet(Set<OrderItem> orderItemSet) {
+        this.orderItemSet = orderItemSet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,4 +105,5 @@ public class Order implements Serializable {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
 }

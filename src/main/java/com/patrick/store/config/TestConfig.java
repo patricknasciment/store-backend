@@ -40,6 +40,9 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @Override
     public void run(String... args) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -100,5 +103,18 @@ public class TestConfig implements CommandLineRunner {
         orderRepository.saveAll(List.of(order1, order2));
         paymentRepository.saveAll(List.of(payment1, payment2));
         clientRepository.save(cli1);
+
+        OrderItem ot1 = new OrderItem(p1, order1, 0.0, 2, 2000.0);
+        OrderItem ot2 = new OrderItem(p3, order1, 0.0, 1, 80.0);
+        OrderItem ot3 = new OrderItem(p2, order2, 100.0, 1, 800.0);
+
+        order1.getOrderItemSet().addAll(List.of(ot1, ot2));
+        order2.getOrderItemSet().addAll(List.of(ot3));
+
+        p1.getOrderItemSet().add(ot1);
+        p2.getOrderItemSet().add(ot3);
+        p3.getOrderItemSet().add(ot2);
+
+        orderItemRepository.saveAll(List.of(ot1, ot2, ot3));
     }
 }
