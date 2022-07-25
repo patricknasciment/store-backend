@@ -2,8 +2,10 @@ package com.patrick.store.service;
 
 import com.patrick.store.domain.Category;
 import com.patrick.store.repositories.CategoryRepository;
+import com.patrick.store.service.exeptions.DataIntegrityException;
 import com.patrick.store.service.exeptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,5 +34,14 @@ public class CategoryService {
     public Category update(Category obj){
         findById(obj.getId());
         return repository.save(obj);
+    }
+
+    public void delete(Integer id){
+        try {
+            repository.deleteById(id);
+        }catch (DataIntegrityViolationException e){
+            throw new DataIntegrityException("It's not possible to delete a Category with Products nested!");
+        }
+
     }
 }
