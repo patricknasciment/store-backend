@@ -42,4 +42,12 @@ public class CategoryResource {
         return ResponseEntity.created(uri).build();
     }
 
+    @PutMapping(path = "{id}")
+    public ResponseEntity<Void> update(@RequestBody Category obj,
+                                           @PathVariable Integer id){
+        obj.setId(id);
+        obj = service.update(obj);
+        return ResponseEntity.noContent().build();
+    }
+
 }
