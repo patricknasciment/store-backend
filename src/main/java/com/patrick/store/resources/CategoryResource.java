@@ -1,6 +1,7 @@
 package com.patrick.store.resources;
 
 import com.patrick.store.domain.Category;
+import com.patrick.store.dto.CategoryDTO;
 import com.patrick.store.repositories.CategoryRepository;
 import com.patrick.store.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/categories")
@@ -20,9 +22,11 @@ public class CategoryResource {
     private CategoryService service;
 
     @GetMapping
-    public ResponseEntity<List<Category>> findAll(){
+    public ResponseEntity<List<CategoryDTO>> findAll(){
         List<Category> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        List<CategoryDTO> listDto = list.stream()
+                .map(x -> new CategoryDTO(x)).toList();
+        return ResponseEntity.ok().body(listDto);
     }
 
     @GetMapping(path = "/{id}")
