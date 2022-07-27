@@ -1,6 +1,7 @@
 package com.patrick.store.service;
 
 import com.patrick.store.domain.Category;
+import com.patrick.store.dto.CategoryDTO;
 import com.patrick.store.repositories.CategoryRepository;
 import com.patrick.store.service.exeptions.DataIntegrityException;
 import com.patrick.store.service.exeptions.ResourceNotFoundException;
@@ -56,5 +57,9 @@ public class CategoryService {
                 linesPerPage,  Sort.Direction.valueOf(direction), orderBy);
 
         return repository.findAll(pageRequest);
+    }
+
+    public Category fromDto(CategoryDTO objDto){
+        return new Category(objDto.getId(), objDto.getName());
     }
 }

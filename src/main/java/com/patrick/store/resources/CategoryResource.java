@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping(value = "/categories")
@@ -37,7 +37,8 @@ public class CategoryResource {
     }
 
     @PostMapping
-    public ResponseEntity<Void> insert(@RequestBody Category obj){
+    public ResponseEntity<Void> insert(@Valid @RequestBody CategoryDTO objDto){
+        Category obj = service.fromDto(objDto);
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -48,10 +49,11 @@ public class CategoryResource {
     }
 
     @PutMapping(path = "{id}")
-    public ResponseEntity<Void> update(@RequestBody Category obj,
+    public ResponseEntity<Void> update(@Valid @RequestBody CategoryDTO objDto,
                                            @PathVariable Integer id){
+        Category obj = service.fromDto(objDto);
         obj.setId(id);
-        obj = service.update(obj);
+        service.update(obj);
         return ResponseEntity.noContent().build();
     }
 
