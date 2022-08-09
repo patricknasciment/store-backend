@@ -1,6 +1,7 @@
 package com.patrick.store.service;
 
 import com.patrick.store.domain.Category;
+import com.patrick.store.domain.Client;
 import com.patrick.store.dto.CategoryDTO;
 import com.patrick.store.repositories.CategoryRepository;
 import com.patrick.store.service.exeptions.DataIntegrityException;
@@ -36,8 +37,9 @@ public class CategoryService {
     }
 
     public Category update(Category obj){
-        findById(obj.getId());
-        return repository.save(obj);
+        Category newObj = findById(obj.getId());
+        updateData(newObj, obj);
+        return repository.save(newObj);
     }
 
     public void delete(Integer id){
@@ -61,5 +63,9 @@ public class CategoryService {
 
     public Category fromDto(CategoryDTO objDto){
         return new Category(objDto.getId(), objDto.getName());
+    }
+
+    private void updateData(Category newObj, Category obj){
+        newObj.setName(obj.getName());
     }
 }
